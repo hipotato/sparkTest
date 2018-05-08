@@ -44,16 +44,16 @@ public class CosineSimilarAlgorithm {
 //        return 0d;
 //    }
 
-    /**
-     *
-     * @Title: cosSimilarityByString
-     * @Description: 得到两个字符串的相似性
-     * @param @param first
-     * @param @param second
-     * @param @return
-     * @return Double
-     * @throws
-     */
+//    /**
+//     *
+//     * @Title: cosSimilarityByString
+//     * @Description: 得到两个字符串的相似性
+//     * @param @param first
+//     * @param @param second
+//     * @param @return
+//     * @return Double
+//     * @throws
+//     */
 //    public static Double cosSimilarityByString(String first,String second){
 //        try{
 //            Map<String, Integer> firstTfMap=TfIdfAlgorithm.segStr(first);

@@ -8,12 +8,12 @@ import com.hankcs.hanlp.HanLP;
 public class HanlpTest {
 
     public static void main(String[] args) {
-        String text = "";
+        String text = "黑龙潭";
         //String traditionText= "比妳聰明的人，請不要讓他還比妳努力";
         System.out.println(HanLP.segment(text));  //分词
 
-        System.out.println(HanLP.extractKeyword(text,2));  //提取关键字，同时指定提取的个数
-        System.out.println(HanLP.extractKeyword(text,1));  //提取关键字，同时指定提取的个数
+        //System.out.println(HanLP.extractKeyword(text,2));  //提取关键字，同时指定提取的个数
+        //System.out.println(HanLP.extractKeyword(text,1));  //提取关键字，同时指定提取的个数
         //System.out.println(HanLP.extractPhrase(text,2));  //提取短语,，同时指定提取的个数
         //System.out.println(HanLP.extractSummary(text,2));  //提取摘要，同时指定提取的个数
 
