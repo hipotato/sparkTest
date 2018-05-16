@@ -78,8 +78,8 @@ public class TextSimilarity {
     }
 
     public static void main(String[] args) {
-        String str1 = "110105";
-        String str2 = "110228";
+        String str1 = "北京市东城区景山前街4号故宫故";
+        String str2 = "上海市浦东新区故宫";
         System.out.println("字符串相似度: " + new TextSimilarity().similar(str1, str2));
     }
 }

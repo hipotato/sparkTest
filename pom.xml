@@ -13,7 +13,9 @@
         <spark.version>2.1.0</spark.version>
         <scala.version>2.11</scala.version>
         <hadoop.version>2.6.0</hadoop.version>
+        <java.version>1.8</java.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.apache.spark</groupId>
@@ -143,6 +145,21 @@
             <version>2.1.1</version>
         </dependency>
 
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.16.10</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <!-- http 请求 客户端 -->
+        <dependency>
+            <groupId>com.squareup.okhttp3</groupId>
+            <artifactId>okhttp</artifactId>
+            <version>3.5.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -161,6 +178,13 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <target>1.7</target>
+                    <source>1.7</source>
+                </configuration>
             </plugin>
         </plugins>
     </build>

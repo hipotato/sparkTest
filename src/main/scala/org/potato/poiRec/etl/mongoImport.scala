@@ -11,6 +11,7 @@ object mongoImport {
     val spark = SparkSession.builder().master("local").appName("MongoSparkConnectorIntro").getOrCreate()
 
     val inputUri="mongodb://iw:iw%402017hu04@192.168.50.168:27017/mga-prod.poi_zh"
+    val outputUri="mongodb://iw:iw%402017hu04@192.168.50.168:27017/mga-prod.poi_zh"
     val load = spark.read.format("com.mongodb.spark.sql").options(
       Map("spark.mongodb.input.uri" -> inputUri,
         "spark.mongodb.input.partitioner" -> "MongoPaginateBySizePartitioner",
@@ -20,7 +21,7 @@ object mongoImport {
     val poiRdd = load.rdd
 
 
-    val originDf = load.selectExpr("_id", "name","geo_num", "type","typecode[0]","location.coordinates[0]","location.coordinates[1]").toDF("id", "name","geo_num", "type","typecode","lat","lng")
+    val originDf = load.selectExpr("_id", "name","geo_num", "type","typecode[0]","location.coordinates[0]","location.coordinates[1]","address","tel[0]").toDF("id", "name","geo_num", "type","typecode","lng","lat","address","tel")
 
 
 
@@ -29,14 +30,15 @@ object mongoImport {
     val poiTableName = "poi_zh"
 
     spark.sql("drop table if exists "+poiTableName)
-    spark.sql("create table if not exists "+poiTableName+"(id string,name string,geo_num long,type string,typecode string, lat string,lng string)")
+    spark.sql("create table if not exists "+poiTableName+"(id string,name string,geo_num long,type string," +
+      "typecode string,typecodeA string, lat string,lng string,address string,tel string)")
 
 
 
     originDf.createOrReplaceTempView(poiTableTempName)
     spark.sql("truncate table " + poiTableName)
 
-    spark.sql("insert into table " + poiTableName + " select * from " + poiTableTempName)
+    spark.sql("insert into table " + poiTableName + " select id,name,geo_num,type,typecode,substr(typecode,0,2),lat,lng,address,tel from " + poiTableTempName)
 
 
 

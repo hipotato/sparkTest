@@ -14,10 +14,11 @@ object poiRecSimi {
     //创建SparkSession
     val spark = SparkSession.builder().appName("poi_recommend_similar").enableHiveSupport().getOrCreate()//spark任务名称
 
+    var selectPoi = "select id, name,geo_num,typecode,lat,lng from poi_zh limit 10000"
 
     case class Poi(id:String,name:String,geo_num:Long,typecode:String,lat:String,lng:String)
 
-    val poiRDD: RDD[Poi] = spark.sql("select id, name,geo_num,typecode,lat,lng from poi_zh limit 20000").rdd.map {
+    val poiRDD: RDD[Poi] = spark.sql(selectPoi).rdd.map {
       f => Poi(f.getString(0),f.getString(1), f.getLong(2), f.getString(3), f.getString(4),f.getString(5))
     }.filter(_.geo_num!=null).filter(_.lat!=null).filter(_.lng!=null).filter(_.name!=null)
     /**从Hive中读取poi数据，形成DataFrame*/
@@ -67,7 +68,8 @@ object poiRecSimi {
           val totalSim = 0.2*typeSim + 0.2*nameSim+ 0.6*geoSim
 
           (ff.id,totalSim)
-      }.toList.sortBy(k=>k._2).reverse.take(20)
+      }.sortBy(k=>k._2).reverse.take(21).filter(_._2<1.0)
+//      }.toList.sortBy(k=>k._2).reverse.take(21).filter(_._2<1.0)
 
       (selId,simiPois)
     }).flatMap(f=>f._2.map(k=>(f._1,k._1,k._2))).map(f=>Row(f._1,f._2,f._3))
@@ -87,7 +89,9 @@ object poiRecSimi {
     spark.sql("create table if not exists " +poiRec+ "(id string,simiId string,simiValue double)")
 
     reDataFrame.createOrReplaceTempView(poiRecTemp)
-    //spark.sql("truncate table " + poiRec)
+
+
+    spark.sql("truncate table " + poiRec)
     spark.sql("insert into table " + poiRec + " select * from " + poiRecTemp)
   }
 }
