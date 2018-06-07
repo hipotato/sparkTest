@@ -1,9 +1,13 @@
 package com.potato.poiMatch.util;
 
+import com.iwhere.hbase_util.TablePoiOperator;
+import com.potato.poiMatch.common.PropertyStrategyWrapper;
 import com.potato.poiMatch.dto.GeosotJiugongRe;
 import com.potato.poiMatch.dto.GetGeoNumRe;
 import com.potato.poiMatch.dto.HbaseReInfo;
 import com.potato.poiMatch.dto.PoiInfo;
+import net.sf.json.JsonConfig;
+import net.sf.json.util.PropertySetStrategy;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,8 +24,24 @@ public class HttpRequestUtil {
         Map a =  new HashMap<String,String>();
         a.put("geoNum",geoNum);
         a.put("geoLevel",geoLevel);
-        return HttpClient.doGet("http://www.iwhere.com/bearbao-footmark/hbaseTest/getPois",a, HbaseReInfo.class);
+        return HttpClient.doGet("http://dev.iwhere.com:8010/bearbao-footmark/hbaseTest/getPois",a, HbaseReInfo.class);
     }
+
+    public static HbaseReInfo getPoiByGeoNumDirectHbase(Long geoNum,Integer geoLevel) throws IOException {
+
+        TablePoiOperator operator = new TablePoiOperator();
+        JsonConfig config = new JsonConfig();
+        Map<String, Object> classMap = new HashMap<String, Object>();
+        config.setClassMap(classMap);
+        config.setRootClass(PoiInfo.class);
+        config.setPropertySetStrategy(new PropertyStrategyWrapper(PropertySetStrategy.DEFAULT));
+        net.sf.json.JSONArray pois = operator.getGridPoiLang(0, geoNum, geoLevel, null, true);
+        List<PoiInfo> list2 = net.sf.json.JSONArray.toList(pois, new PoiInfo(), config);  Map a =  new HashMap<String,String>();
+        HbaseReInfo re = new HbaseReInfo();
+        re.setData(list2);
+        return re;
+    }
+
 
     public static GetGeoNumRe GetGeoNum(Double lng,Double lat,Integer geoLevel) throws IOException {
         Map a =  new HashMap<String,String>();
@@ -69,7 +89,9 @@ public class HttpRequestUtil {
                 if(re.getServer_status()!=200){
                     throw new Exception("hbase服务异常");
                 }
-                rePois.addAll(re.getData());
+                if(re!=null&&re.getData()!=null){
+                    rePois.addAll(re.getData());
+                }
             }
             System.out.println("location:"+location+",hbase请求时间："+(System.currentTimeMillis()-step1Time));
 

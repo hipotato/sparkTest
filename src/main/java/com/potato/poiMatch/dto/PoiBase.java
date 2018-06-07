@@ -16,6 +16,7 @@ public class PoiBase {
     private Long geoNum;
     private String location;
     private List<String> tel;
+    private String otherid;
     public String getLat(){
         return location.split(",")[0];
     }
@@ -77,5 +78,12 @@ public class PoiBase {
 
     public void setTel(List<String> tel) {
         this.tel = tel;
+    }
+
+    public String getOtherid(){
+        return otherid;
+    }
+    public void setOtherid(String otherid){
+        this.otherid=otherid;
     }
 }
