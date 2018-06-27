@@ -1,0 +1,3 @@
+spark-shell      --packages org.mongodb.spark:mongo-spark-connector_2.10:2.1.1,com.squareup.okhttp3:okhttp:3.5.0
+
+spark-shell      --jars /home/hbase/spark/SparkTest-1.0-SNAPSHOT.jar,/home/hbase/spark/conf/commons-beanutils-1.9.2.jar,/home/hbase/spark/conf/commons-logging-1.1.3.jar,/home/hbase/spark/conf/ezmorph-1.0.6.jar,/home/hbase/spark/conf/json-lib-2.4-jdk15.jar,/home/hbase/spark/conf/hbase-util-1.2.7-SNAPSHOT.jar,/home/hbase/spark/conf/hanlp-portable-1.2.8.jar,/home/hbase/spark/conf/mysql-connector-java-5.1.40.jar --packages org.mongodb.spark:mongo-spark-connector_2.10:2.1.1,com.squareup.okhttp3:okhttp:3.5.0

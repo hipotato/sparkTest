@@ -1,6 +1,6 @@
 package com.potato.poiMatch.util;
 
-import com.iwhere.hbase_util.TablePoiOperator;
+import com.potato.hbase.TablePoiOperator;
 import com.potato.poiMatch.common.PropertyStrategyWrapper;
 import com.potato.poiMatch.dto.GeosotJiugongRe;
 import com.potato.poiMatch.dto.GetGeoNumRe;
@@ -36,7 +36,7 @@ public class HttpRequestUtil {
         config.setRootClass(PoiInfo.class);
         config.setPropertySetStrategy(new PropertyStrategyWrapper(PropertySetStrategy.DEFAULT));
         net.sf.json.JSONArray pois = operator.getGridPoiLang(0, geoNum, geoLevel, null, true);
-        List<PoiInfo> list2 = net.sf.json.JSONArray.toList(pois, new PoiInfo(), config);  Map a =  new HashMap<String,String>();
+        List<PoiInfo> list2 = net.sf.json.JSONArray.toList(pois, new PoiInfo(), config);
         HbaseReInfo re = new HbaseReInfo();
         re.setData(list2);
         return re;
@@ -79,16 +79,16 @@ public class HttpRequestUtil {
                 Future<HbaseReInfo> future = ThreadPoolUtils.getThreadPool().submit(new Callable<HbaseReInfo>() {
                     @Override
                     public HbaseReInfo call() throws Exception {
-                        return  getPoiByGeoNum(geoNum,geoLevel);
+                        return  getPoiByGeoNumDirectHbase(geoNum,geoLevel);
                     }
                 });
                 futureSet.add(future);
             }
             for(Future<HbaseReInfo> future:futureSet){
                 HbaseReInfo re =future.get(10, TimeUnit.SECONDS);
-                if(re.getServer_status()!=200){
-                    throw new Exception("hbase服务异常");
-                }
+//                if(re.getServer_status()!=200){
+//                    throw new Exception("hbase服务异常");
+//                }
                 if(re!=null&&re.getData()!=null){
                     rePois.addAll(re.getData());
                 }

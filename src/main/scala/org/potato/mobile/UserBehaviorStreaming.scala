@@ -59,7 +59,6 @@ object UserBehaviorStreaming {
     )
     //将新的offset记录下来
 
-
     //println("Dstream数量："+kafkaDirectStream.count())
     //将json转换为UserBehavor，并筛选出符合条件的对象
     val filteredDStream = kafkaDirectStream.map(log=>{
